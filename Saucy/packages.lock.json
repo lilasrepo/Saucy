@@ -1,24 +1,12 @@
 {
   "version": 1,
   "dependencies": {
-    "net10.0-windows7.0": {
+    "net9.0-windows7.0": {
       "DalamudPackager": {
         "type": "Direct",
-        "requested": "[15.0.0, )",
-        "resolved": "15.0.0",
-        "contentHash": "411vwC8/X8Z/sQ2TI6v3SvOn66xFPeOjFn3Zn+h0d3Ox2t1kFm66AhDvmx/qcMwVrR+Hidxj0dadpQ2dgyXMBQ=="
-      },
-      "DotNet.ReproducibleBuilds": {
-        "type": "Direct",
-        "requested": "[2.0.2, )",
-        "resolved": "2.0.2",
-        "contentHash": "VaHoEN6YHp0jXucxm67vfuRy8zo9ufiKSuaZ4ZudRi8xmWcEFMKxfCsg2nvYNvdISFTURDu+IHqADGh53+Bamw=="
-      },
-      "ECommons": {
-        "type": "Direct",
-        "requested": "[3.2.1.9, )",
-        "resolved": "3.2.1.9",
-        "contentHash": "3xH+DsMgitCYyCVkXBeId/n6dmGGimH8/IXVubq6zA6otSe8phmmu0dD+Yh6dM5HQF0m0DLDkr4d5U8UMGR2vw=="
+        "requested": "[2.1.13, )",
+        "resolved": "2.1.13",
+        "contentHash": "rMN1omGe8536f4xLMvx9NwfvpAc9YFFfeXJ1t4P4PE6Gu8WCIoFliR1sh07hM+bfODmesk/dvMbji7vNI+B/pQ=="
       },
       "NAudio": {
         "type": "Direct",
@@ -88,10 +76,13 @@
           "NAudio.Core": "2.3.0"
         }
       },
+      "ecommons": {
+        "type": "Project"
+      },
       "punishlib": {
         "type": "Project",
         "dependencies": {
-          "ECommons": "[3.2.0.11, )"
+          "ECommons": "[3.0.0.7, )"
         }
       }
     }

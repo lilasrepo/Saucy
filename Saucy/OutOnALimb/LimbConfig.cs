@@ -1,0 +1,14 @@
+﻿using System;
+using System.Reflection;
+namespace Saucy.OutOnALimb;
+
+[Serializable]
+[Obfuscation(Exclude = true)]
+public class LimbConfig
+{
+    public bool EnableLimb = false;
+    public int HardStopAt = 12;
+    public LimbDifficulty LimbDifficulty = LimbDifficulty.Titan;
+    public int Step = 10;
+    public int StopAt = 18;
+}
