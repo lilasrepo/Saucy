@@ -49,6 +49,10 @@ public class Svc
     [PluginService] public static IContextMenu ContextMenu { get; private set; }
     [PluginService] public static IMarketBoard MarketBoard { get; private set; }
 
+    // porting-note(api12): newer ECommons exposes Svc.PlayerState; gap-filled for this walk-back tree.
+    public static unsafe ref FFXIVClientStructs.FFXIV.Client.Game.UI.PlayerState PlayerState
+        => ref *FFXIVClientStructs.FFXIV.Client.Game.UI.PlayerState.Instance();
+
     internal static bool IsInitialized = false;
     public static void Init(IDalamudPluginInterface pi)
     {

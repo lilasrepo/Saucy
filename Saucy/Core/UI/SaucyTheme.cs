@@ -1,0 +1,252 @@
+using ImGuiNET;
+using Dalamud.Interface.Colors;
+using Dalamud.Interface.Utility.Raii;
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+namespace Saucy;
+
+public struct BannerInfo
+{
+    public int Mgp;
+    public int SessionDelta;
+    public string ModuleStatus;
+}
+
+internal static class SaucyTheme
+{
+    private const float WindowRound = 4f;
+    private const float ChildRound = 3f;
+    private const float FrameRound = 2f;
+    private const float PopupRound = 3f;
+    private const float ScrollbarRound = 2f;
+    private const float GrabRound = 2f;
+    private const float TabRound = 3f;
+    private const float BorderSize = 1f;
+
+    private const float CardPad = 8f;
+    private const float CardGapBetween = 6f;
+    private const float CardSepGapAbove = 3f;
+    private const float CardSepGapBelow = 4f;
+    private const float CardBorderRound = 3f;
+    private const float CardBorderWeight = 1f;
+
+    private static readonly Vector4 BgDarkest = Rgb(0x1A, 0x0B, 0x2E);
+    private static readonly Vector4 BgPanel = Rgb(0x2A, 0x11, 0x45);
+    private static readonly Vector4 BgInput = Rgb(0x3D, 0x1B, 0x5C);
+    private static readonly Vector4 BgInputHover = Rgb(0x4D, 0x24, 0x70);
+    private static readonly Vector4 BgInputActive = Rgb(0x5D, 0x2D, 0x85);
+
+    private static readonly Vector4 Highlight = Rgb(0x7B, 0x2D, 0x8E);
+    private static readonly Vector4 HighlightHover = Rgb(0x9B, 0x3F, 0xB0);
+    private static readonly Vector4 HighlightActive = Rgb(0xB8, 0x5C, 0xCC);
+
+    private static readonly Vector4 Accent = Rgb(0xE5, 0xB8, 0x4B);
+    private static readonly Vector4 AccentSoft = Rgb(0xE5, 0xB8, 0x4B, 0.5f);
+    private static readonly Vector4 AccentBright = Rgb(0xFF, 0xD9, 0x68);
+
+    private static readonly Vector4 Signal = Rgb(0xFF, 0x4B, 0x9E);
+
+    private static readonly Vector4 TextPrimary = Rgb(0xF4, 0xE4, 0xBC);
+    private static readonly Vector4 TextDim = Rgb(0xB8, 0xA5, 0x80);
+    private static readonly Vector4 None = new(0, 0, 0, 0);
+
+#pragma warning disable IDE0028 // Capacity hint; collection-expression with() is C# 15 preview (Rider does not resolve it)
+    private static readonly List<IDisposable> _themeScope = new(64);
+#pragma warning restore IDE0028
+    private static int _themeDepth;
+
+    public static Vector4 CardBorder { get; } = Accent;
+    public static Vector4 CardSeparator { get; } = AccentSoft;
+    public static Vector4 SectionTitle { get; } = AccentBright;
+    public static Vector4 ColumnHeader { get; } = Accent;
+    public static Vector4 BodyText { get; } = TextPrimary;
+    public static Vector4 BodyTextAccent { get; } = AccentBright;
+
+    public static Vector4 TextMutedColor => ColorOr(TextDim, ImGuiCol.TextDisabled);
+    public static Vector4 TextWarningColor => Enabled ? AccentBright : ImGuiColors.DalamudYellow;
+    public static Vector4 TextErrorColor => Enabled ? Signal : ImGuiColors.DalamudRed;
+
+    public static bool Enabled => C.SaucyThemeEnabled;
+    private static Vector4 Rgb(byte r, byte g, byte b, float a = 1f) =>
+        new(r / 255f, g / 255f, b / 255f, a);
+
+    public static Vector4 ColorOr(Vector4 themeColor, ImGuiCol fallback) =>
+        Enabled ? themeColor : ImGui.GetStyle().Colors[(int)fallback];
+
+    public static uint ColorU32Or(Vector4 themeColor, ImGuiCol fallback) =>
+        Enabled ? ImGui.GetColorU32(themeColor) : ImGui.GetColorU32(fallback);
+
+    private static void PushColor(ImGuiCol c, Vector4 v) => _themeScope.Add(ImRaii.PushColor(c, v));
+
+    private static void PushVar(ImGuiStyleVar v, float x) => _themeScope.Add(ImRaii.PushStyle(v, x));
+
+    public static ThemeScope PushScope()
+    {
+        if (Enabled && _themeDepth == 0)
+        {
+            PushInternal();
+        }
+
+        if (Enabled)
+        {
+            _themeDepth++;
+        }
+
+        return new(Enabled);
+    }
+
+    private static void PushInternal()
+    {
+        PushColor(ImGuiCol.Text, TextPrimary);
+        PushColor(ImGuiCol.TextDisabled, TextDim);
+        PushColor(ImGuiCol.TextSelectedBg, Signal);
+
+        PushColor(ImGuiCol.WindowBg, BgDarkest);
+        PushColor(ImGuiCol.ChildBg, BgPanel);
+        PushColor(ImGuiCol.PopupBg, BgDarkest);
+        PushColor(ImGuiCol.Border, Accent);
+        PushColor(ImGuiCol.BorderShadow, None);
+
+        PushColor(ImGuiCol.FrameBg, BgInput);
+        PushColor(ImGuiCol.FrameBgHovered, BgInputHover);
+        PushColor(ImGuiCol.FrameBgActive, BgInputActive);
+        PushColor(ImGuiCol.CheckMark, Signal);
+        PushColor(ImGuiCol.SliderGrab, Accent);
+        PushColor(ImGuiCol.SliderGrabActive, AccentBright);
+
+        PushColor(ImGuiCol.TitleBg, BgPanel);
+        PushColor(ImGuiCol.TitleBgActive, Highlight);
+        PushColor(ImGuiCol.TitleBgCollapsed, BgPanel);
+        PushColor(ImGuiCol.MenuBarBg, BgPanel);
+
+        PushColor(ImGuiCol.ScrollbarBg, BgDarkest);
+        PushColor(ImGuiCol.ScrollbarGrab, Highlight);
+        PushColor(ImGuiCol.ScrollbarGrabHovered, HighlightHover);
+        PushColor(ImGuiCol.ScrollbarGrabActive, HighlightActive);
+
+        PushColor(ImGuiCol.Button, BgPanel);
+        PushColor(ImGuiCol.ButtonHovered, Highlight);
+        PushColor(ImGuiCol.ButtonActive, HighlightHover);
+
+        PushColor(ImGuiCol.Header, Highlight);
+        PushColor(ImGuiCol.HeaderHovered, HighlightHover);
+        PushColor(ImGuiCol.HeaderActive, HighlightActive);
+
+        PushColor(ImGuiCol.Separator, AccentSoft);
+        PushColor(ImGuiCol.SeparatorHovered, Accent);
+        PushColor(ImGuiCol.SeparatorActive, AccentBright);
+
+        PushColor(ImGuiCol.ResizeGrip, Highlight);
+        PushColor(ImGuiCol.ResizeGripHovered, HighlightHover);
+        PushColor(ImGuiCol.ResizeGripActive, HighlightActive);
+
+        PushColor(ImGuiCol.Tab, BgPanel);
+        PushColor(ImGuiCol.TabHovered, Highlight);
+        PushColor(ImGuiCol.TabActive, Highlight);
+        PushColor(ImGuiCol.TabUnfocused, BgPanel);
+        PushColor(ImGuiCol.TabUnfocusedActive, BgInput);
+
+        PushVar(ImGuiStyleVar.WindowRounding, WindowRound);
+        PushVar(ImGuiStyleVar.ChildRounding, ChildRound);
+        PushVar(ImGuiStyleVar.FrameRounding, FrameRound);
+        PushVar(ImGuiStyleVar.PopupRounding, PopupRound);
+        PushVar(ImGuiStyleVar.ScrollbarRounding, ScrollbarRound);
+        PushVar(ImGuiStyleVar.GrabRounding, GrabRound);
+        PushVar(ImGuiStyleVar.TabRounding, TabRound);
+        PushVar(ImGuiStyleVar.WindowBorderSize, BorderSize);
+        PushVar(ImGuiStyleVar.FrameBorderSize, BorderSize);
+    }
+
+    private static void PopInternal()
+    {
+        for (var i = _themeScope.Count - 1; i >= 0; i--)
+        {
+            _themeScope[i].Dispose();
+        }
+
+        _themeScope.Clear();
+    }
+
+    public static void TextMuted(string text) => ImGui.TextColored(TextMutedColor, text);
+
+    public static void TextWarning(string text) => ImGui.TextColored(TextWarningColor, text);
+
+    public static void TextError(string text) => ImGui.TextColored(TextErrorColor, text);
+
+    public static void TextErrorWrapped(string text)
+    {
+        using var color = ImRaii.PushColor(ImGuiCol.Text, TextErrorColor);
+        ImGui.TextWrapped(text);
+    }
+
+    public static void DrawPanelHeader(string title, string? subtitle = null)
+    {
+        ImGui.TextColored(ColorOr(SectionTitle, ImGuiCol.Text), title);
+        if (!string.IsNullOrEmpty(subtitle))
+        {
+            ImGui.SameLine();
+            ImGui.TextDisabled(" \u2014 " + subtitle);
+        }
+
+        ImGui.Separator();
+        ImGui.Dummy(new(0, 2));
+    }
+
+    public static void DrawCard(string name, string? subtitle, Action body)
+    {
+        var drawList = ImGui.GetWindowDrawList();
+        var avail = ImGui.GetContentRegionAvail().X;
+        var startScreen = ImGui.GetCursorScreenPos();
+
+        ImGui.Dummy(new(0, CardPad));
+        using var indent = ImRaii.PushIndent(CardPad);
+
+        ImGui.TextColored(ColorOr(SectionTitle, ImGuiCol.Text), name);
+        if (!string.IsNullOrEmpty(subtitle))
+        {
+            ImGui.SameLine();
+            ImGui.TextDisabled(" \u2014 " + subtitle);
+        }
+
+        var sepY = ImGui.GetCursorScreenPos().Y + CardSepGapAbove;
+        drawList.AddLine(
+            new(startScreen.X + CardPad, sepY),
+            new(startScreen.X + avail - CardPad, sepY),
+            ColorU32Or(CardSeparator, ImGuiCol.Separator), CardBorderWeight);
+        ImGui.Dummy(new(0, CardSepGapBelow));
+
+        body();
+
+        ImGui.Dummy(new(0, CardPad));
+
+        var endY = ImGui.GetCursorScreenPos().Y;
+        drawList.AddRect(
+            new(startScreen.X, startScreen.Y),
+            new(startScreen.X + avail, endY),
+            ColorU32Or(CardBorder, ImGuiCol.Border), CardBorderRound);
+
+        ImGui.Dummy(new(0, CardGapBetween));
+    }
+
+    public readonly struct ThemeScope : IDisposable
+    {
+        private readonly bool _active;
+
+        internal ThemeScope(bool active) => _active = active;
+
+        public void Dispose()
+        {
+            if (!_active)
+            {
+                return;
+            }
+
+            _themeDepth--;
+            if (_themeDepth == 0)
+            {
+                PopInternal();
+            }
+        }
+    }
+}

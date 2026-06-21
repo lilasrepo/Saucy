@@ -10,7 +10,7 @@
 
     <PropertyGroup>
         <Authors>Puni.sh</Authors>
-        <Version>1.6.0.0</Version>
+        <Version>2.1.1.9</Version>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -37,6 +37,9 @@
         <None Update="Saucy.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Include="Icon.png" Link="images\icon.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Include="Sounds\Game Over.mp3">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
@@ -46,30 +49,6 @@
         <None Include="Sounds\Time Up.mp3">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-    </ItemGroup>
-
-    <!-- TriadBuddy standalone plugin UI — kept on disk for upstream merges, not compiled into Saucy -->
-    <ItemGroup>
-        <Compile Remove="TripleTriad\TriadBuddy\plugin\Plugin.cs" />
-        <Compile Remove="TripleTriad\TriadBuddy\plugin\PluginOverlays.cs" />
-        <Compile Remove="TripleTriad\TriadBuddy\plugin\Service.cs" />
-        <Compile Remove="TripleTriad\TriadBuddy\plugin\Configuration.cs" />
-        <Compile Remove="TripleTriad\TriadBuddy\plugin\StatTracker.cs" />
-        <Compile Remove="TripleTriad\TriadBuddy\plugin\SolverUtils.cs" />
-        <Compile Remove="TripleTriad\TriadBuddy\plugin\SolverGame.cs" />
-        <Compile Remove="TripleTriad\TriadBuddy\plugin\SolverPreGameDecks.cs" />
-        <Compile Remove="TripleTriad\TriadBuddy\plugin\SolverDeckOptimize.cs" />
-        <Compile Remove="TripleTriad\TriadBuddy\plugin\UIReaderTriadCardList.cs" />
-        <Compile Remove="TripleTriad\TriadBuddy\plugin\UIReaderTriadDeckEdit.cs" />
-        <Compile Remove="TripleTriad\TriadBuddy\plugin\UnsafeReaderTriadDeck.cs" />
-        <Compile Remove="TripleTriad\TriadBuddy\plugin\PluginWindowStatus.cs" />
-        <Compile Remove="TripleTriad\TriadBuddy\plugin\PluginWindowNpcStats.cs" />
-        <Compile Remove="TripleTriad\TriadBuddy\plugin\PluginWindowCardSearch.cs" />
-        <Compile Remove="TripleTriad\TriadBuddy\plugin\PluginWindowCardInfo.cs" />
-        <Compile Remove="TripleTriad\TriadBuddy\plugin\PluginWindowDeckOptimize.cs" />
-        <Compile Remove="TripleTriad\TriadBuddy\plugin\PluginWindowDeckSearch.cs" />
-        <Compile Remove="TripleTriad\TriadBuddy\plugin\PluginWindowDeckEval.cs" />
-        <Compile Remove="TripleTriad\TriadBuddy\utils\CardUtils.cs" />
     </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DalamudPackager" Version="2.1.13" />
