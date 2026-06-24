@@ -10,11 +10,19 @@
 
     <PropertyGroup>
         <Authors>Puni.sh</Authors>
-        <Version>2.1.1.9</Version>
+        <Version>2.1.1.11</Version>
     </PropertyGroup>
 
     <PropertyGroup>
         <LangVersion>preview</LangVersion>
+    </PropertyGroup>
+
+    <!-- Apply .editorconfig code-style (IDE*) and analyzers on Debug builds and when CI=true. -->
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(CI)' == 'true'">
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <AnalysisLevel>latest</AnalysisLevel>
+        <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(OS)' != 'Windows_NT' OR '$(CI)' == 'true'">
@@ -89,4 +97,6 @@
   </ItemGroup>
 
 
+
 </Project>
+

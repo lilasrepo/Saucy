@@ -378,7 +378,7 @@ internal static class TriadOptimizedDeckCacheStore
             return 0;
         }
 
-        return Svc.PlayerState.ContentId;
+        return Svc.ClientState.LocalContentId;
     }
 
     private static void LoadForCharacter(ulong contentId)
@@ -564,7 +564,7 @@ internal static class TriadOptimizedDeckCacheStore
 
     private static void StampCharacterMetadata(TriadOptimizedDeckCacheFile file)
     {
-        if (Svc.PlayerState.IsLoaded == 0 || activeContentId == 0 || Svc.PlayerState.ContentId != activeContentId)
+        if (Svc.PlayerState.IsLoaded == 0 || activeContentId == 0 || Svc.ClientState.LocalContentId != activeContentId)
         {
             return;
         }
@@ -589,7 +589,7 @@ internal static class TriadOptimizedDeckCacheStore
                 : $"{file.CharacterName} @ {worldName}";
         }
 
-        if (isCurrentCharacter && Svc.PlayerState.IsLoaded != 0 && Svc.PlayerState.ContentId == contentId)
+        if (isCurrentCharacter && Svc.PlayerState.IsLoaded != 0 && Svc.ClientState.LocalContentId == contentId)
         {
             // porting-note(api12): no Lumina HomeWorld RowRef on API12 PlayerState — resolve via Dalamud LocalPlayer.
             var worldName = ResolveWorldName(Svc.ClientState.LocalPlayer?.HomeWorld.RowId ?? 0);
